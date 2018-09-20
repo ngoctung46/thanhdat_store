@@ -1,0 +1,5 @@
+<ul>
+  <li *ngFor="let route of routes">
+    <a [routerLink]="[route.url]">{{ route.name }}</a>
+  </li>
+</ul>
