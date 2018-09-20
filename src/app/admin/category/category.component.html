@@ -1,3 +1,13 @@
 <p>
   category admin works!
 </p>
+<ul *ngIf="categories">
+  <li *ngFor="let category of categories">
+    {{ category.name }} - {{ category.description }}
+    <ul>
+      <li *ngFor="let product of category.products">
+        {{ product.name }} - {{ product.description }}
+      </li>
+    </ul>
+  </li>
+</ul>
