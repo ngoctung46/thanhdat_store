@@ -33,4 +33,13 @@ export class ProductService extends BaseService {
         catchError(this.handleError('getProduct', null))
       );
   }
+
+  public updateProduct(product: Product): Observable<Product> {
+    const url = `${this.productUrl}/${product._id}`;
+    return this.http.put<Product>(url, product, httpOptions)
+      .pipe(
+        tap(p => this.log(`update ${p.name} successfully`)),
+        catchError(this.handleError('getProduct', null))
+      );
+  }
 }

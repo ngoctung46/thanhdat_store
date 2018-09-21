@@ -1,20 +1,21 @@
-<p>
-  category admin works!
-</p>
+<h1 class="text-secondary text-center">Quản Lý Danh Mục</h1>
 <app-category-form (savingCategory)="onSaving($event)"></app-category-form>
-<table *ngIf="categories">
-  <tr>
-    <td>Tên</td>
-    <td>Nội dung</td>
-    <td></td>
-  </tr>
+<h3 class="text-info text-center"></h3>
+<table class="table table-bordered table-sm" *ngIf="categories">
+  <thead class="thead-light">
+    <tr class="table-secondary text-center">
+      <td scope="col">Tên</td>
+      <td scope="col">Nội dung</td>
+      <td scope="col"></td>
+    </tr>
+  </thead>
   <tr *ngFor="let category of categories">
-    <td><input [(ngModel)]="category.name" [disabled]="!isEditing"></td>
-    <td><input [(ngModel)]="category.description" [disabled]="!isEditing"></td>
-    <td>
-      <button *ngIf="!isEditing" (click)="isEditing = true">Edit</button>
-      <button *ngIf="isEditing" (click)="onUpdate(category)">Save</button>
-      <button (click)="onDelete(category._id)">Delete</button>
+    <td><input class="form-control" [(ngModel)]="category.name" [disabled]="!isEditing"></td>
+    <td><input class="form-control" [(ngModel)]="category.description" [disabled]="!isEditing"></td>
+    <td class="text-center">
+      <button *ngIf="!isEditing" class="btn btn-success" (click)="isEditing = true">Sửa</button>
+      <button *ngIf="isEditing" class="btn btn-info" (click)="onUpdate(category)">Lưu</button>
+      <button class="btn btn-danger" style="margin-left: 10px;" (click)="onDelete(category._id)">Xóa</button>
     </td>
   </tr>
 </table>

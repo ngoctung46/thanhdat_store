@@ -1,24 +1,32 @@
-<p>
-  product works!
-</p>
-<app-product-form (savingProduct)="addProduct($event)"></app-product-form>
-<table *ngIf="products.length > 0">
-  <th>
-    <tr>
-      <td>Name</td>
-      <td>Description</td>
-      <td>Price</td>
-      <td>Available</td>
-      <td>On Sale</td>
-      <td>Category</td>
+<app-product-form #productForm (savingProduct)="addProduct($event)" [product]="selectedProduct"></app-product-form>
+<h1 class="text-center text-primary">Quản lý sản phẩm</h1>
+<button class="btn btn-success" (click)="selectedProduct={};openModal()">Thêm</button>
+<br/>
+<table *ngIf="products.length > 0" class="table table-bordered table-sm table-responsive">
+  <thead class="thead-light" class="text-center">
+    <tr class="table-secondary">
+      <th>Tên</th>
+      <th>Nội Dung</th>
+      <th>Giá</th>
+      <th>Danh Mục</th>
+      <th>Còn Hàng</th>
+      <th>Giảm Giá</th>
+      <th></th>
+      <th></th>
     </tr>
-  </th>
+  </thead>
   <tr *ngFor="let product of products">
     <td>{{ product.name }}</td>
     <td>{{ product.description }}</td>
-    <td>{{ product.price }}</td>
-    <td><input type="checkbox" disabled [value]="product.available"> Available</td>
-    <td><input type="checkbox" disabled [value]="product.on_sale"> On Sale</td>
-    <td>{{ product.category.name }}</td>
+    <td>{{ product.price | number }}</td>
+    <td>{{ product.category?.name }}</td>
+    <td><input type="checkbox" disabled [checked]="product.available"></td>
+    <td><input type="checkbox" disabled [checked]="product.on_sale"></td>
+    <td>
+      <button class="btn btn-info" (click)="selectedProduct = product;openModal()">Sửa</button>
+    </td>
+    <td>
+      <button class="btn btn-danger" style="margin-left: 5px">Xóa</button>
+    </td>
   </tr>
 </table>

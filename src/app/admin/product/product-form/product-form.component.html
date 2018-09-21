@@ -1,45 +1,49 @@
-<p>
-  product-form works!
-</p>
-<form [formGroup]="productForm" (ngSubmit)="onSubmit()">
-  <label for="name">
-    Name:
-    <input type="text" formControlName="name" required>
-  </label>
-  <br/>
-  <label for="description">
-    Description:
-    <textarea name="description"
-      id="description" cols="30"
-      rows="10" formControlName="description">
-    </textarea>
-  </label>
-  <br/>
-  <label for="price">
-    Price:
-    <input type="number" formControlName="price" required>
-  </label>
-  <br/>
-  <label for="available">
-    <input type="checkbox" formControlName="available"> Available
-  </label>
-  <br/>
-  <label for="on_sale">
-    <input type="checkbox" formControlName="on_sale"> On Sale
-  </label>
-  <br/>
-  <label for="image_url">
-    <input type="file" formControlName="image_url"> Image
-  </label>
-  <br/>
-  <label for="category">
-    <select name="category_id" formControlName="category_id">
-      <option [value]="null" disabled>Choose Category</option>
-      <option *ngFor="let category of categories" [value]="category._id">
-        {{ category.name }}
-      </option>
-    </select>
-  </label>
-  <br/>
-  <button type="submit" [disabled]="!productForm.valid">Save</button>
-</form>
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Thêm/sửa sản phẩm</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form [formGroup]="productForm">
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="name">Tên</label>
+        <input type="text" class="form-control" formControlName="name" required>
+      </div>
+      <div class="form-group">
+        <label for="description">Nội dung</label>
+        <textarea name="description" class="form-control" id="description" cols="30" rows="10" formControlName="description">
+        </textarea>
+      </div>
+      <div class="form-group">
+        <label for="price">Giá</label>
+        <input type="number" class="form-control" formControlName="price" required>
+      </div>
+      <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" formControlName="available">
+        <label class="fom-check-label" for="available">Còn Hàng</label>
+      </div>
+      <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" formControlName="on_sale">
+        <label class="fom-check-label" for="on_sale">Giảm giá</label>
+      </div>
+      <div class="form-group">
+        <label for="image_url">Hình ảnh</label>
+        <input type="file" class="form-control-file" formControlName="image_url">
+      </div>
+      <div class="form-group">
+        <label for="category">Danh mục</label>
+        <select name="category_id" formControlName="category_id" class="form-control">
+          <option [value]="null" disabled>Chọn danh mục</option>
+          <option *ngFor="let category of categories" [value]="category._id">
+            {{ category.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button (click)="onSubmit();modal.dismiss();" class="btn btn-block btn-primary" [disabled]="!productForm.valid">Lưu</button>
+    </div>
+  </form>
+</ng-template>
