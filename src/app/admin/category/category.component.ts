@@ -9,6 +9,8 @@ import { Category } from '../../models/category.model';
 })
 export class CategoryComponent implements OnInit {
   categories: Category[] = [];
+  editButtonName: string;
+  isEditing: boolean;
   constructor(private categoryService: CategoryService) { }
 
   ngOnInit() {
@@ -18,6 +20,23 @@ export class CategoryComponent implements OnInit {
   getCategories(): void {
     this.categoryService.getCategories()
       .subscribe(categories => this.categories = categories);
+  }
+
+  onDelete(id: string): void {
+    this.categoryService.removeCategory(id).subscribe(_ => {
+      this.categories = this.categories.filter(c => c._id !== id);
+    });
+  }
+
+  onUpdate(category: Category): void {
+    this.categoryService.updateCategory(category).subscribe(_ => {
+      this.isEditing = false;
+    });
+  }
+
+  private onSaving(category) {
+    this.categoryService.saveCategory(category)
+      .subscribe(cat => this.categories.push(cat));
   }
 
 

@@ -9,6 +9,7 @@ export class HeaderComponent implements OnInit {
   routes = [
     { name: 'Home', url: './home' },
     { name: 'Category', url: './category' },
+    { name: 'Product', url: './product'},
     { name: 'About Us', url: './about' },
     { name: 'Contact', url: './contact' }
   ];

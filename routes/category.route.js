@@ -31,14 +31,14 @@ router.post('/', function(req, res, next) {
 });
 
 router.put('/:id', function(req, res, next) {
-  Category.findOneAndUpdate(req.params.id, req.body, function (err, item) {
+  Category.findOneAndUpdate({ _id : req.params.id}, req.body, function (err, item) {
         if (err) return next(err);
         res.json(item);
     });
 });
 
 router.delete('/:id', function(req, res, next) {
-  Category.findOneAndRemove(req. params.id, function (err, item) {
+  Category.findOneAndRemove({ _id : req.params.id}, function (err, item) {
         if (err) return next(err);
         res.json(item);
     });

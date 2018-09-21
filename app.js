@@ -9,7 +9,7 @@ var storeRouter = require('./routes/store.route');
 var app = express();
 var config = require('./config/database');
 var mongoose = require('mongoose');
-mongoose.connect(config.localConnectionStr,{
+mongoose.connect(config.cloudConnectionStr,{
   promiseLibrary: require('bluebird'),
   useNewUrlParser: true })
   .then(() => console.log('connection successful'))

@@ -1,3 +1,4 @@
+import { ProductComponent } from './product/product.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AdminComponent } from './admin.component';
@@ -17,6 +18,7 @@ const routes: Routes = [
       { path: 'category', component: CategoryComponent },
       { path: 'about', component: AboutComponent },
       { path: 'contact', component: ContactComponent },
+      { path: 'product', component: ProductComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   }

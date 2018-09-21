@@ -1,3 +1,4 @@
+import { ProductModule } from './product/product.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -18,6 +19,7 @@ import { AboutModule } from './about/about.module';
     ContactModule,
     CategoryModule,
     AboutModule,
+    ProductModule,
     AdminRoutingModule
   ],
   declarations: [DashboardComponent, AdminComponent, HeaderComponent, FooterComponent]

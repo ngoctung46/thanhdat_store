@@ -1,17 +1,21 @@
+import { Product } from './../models/product.models';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { Category } from '../models/category.model';
 import { catchError, map, tap } from 'rxjs/operators';
+import { BaseService } from './base.service';
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
 
 @Injectable({ providedIn: 'root' })
-export class CategoryService {
+export class CategoryService extends BaseService {
   private categoryUrl = 'api/category';
   private productUrl = 'api/product';
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    super();
+  }
 
   /** Get categories from the server */
   getCategories(): Observable<Category[]> {
@@ -27,35 +31,54 @@ export class CategoryService {
       );
   }
 
-  private getProducts(categoryId: string): Observable<any[]> {
-    const url = `${this.categoryUrl}/${categoryId}/products`;
-    return this.http.get<any[]>(url)
+  getCategory(id: string): Observable<Category> {
+    const url = `${this.categoryUrl}/${id}`;
+    return this.http.get<Category>(url)
       .pipe(
-        tap(products => this.log(`fetched ${products.length} products`)),
-        catchError(this.handleError('getProducts',[]))
+        tap(cat => {
+          this.getProducts(cat._id)
+            .subscribe(products => cat.products = products);
+        }),
+        catchError(this.handleError('getCategory', null))
+        );
+  }
+
+  /** Add new category to the server */
+  saveCategory(category: Category): Observable<Category> {
+    return this.http.post<Category>(this.categoryUrl, category, httpOptions)
+      .pipe(
+        tap(cat => this.log(`${cat.name} added successfully`)),
+        catchError(this.handleError('saveCategory', null))
       );
   }
 
-  /**
-   * Handle Http operation that failed.
-   * Let the app continue.
-   * @param operation - name of the operation that failed
-   * @param result - optional value to return as the observable result
-   */
-  private log(message: string) {
-    console.log(`CategoryService: ${message}`);
+  /** Update existing category on server */
+  updateCategory(category: Category): Observable<Category> {
+    const url = `${this.categoryUrl}/${category._id}`;
+    return this.http.put<Category>(url, category, httpOptions)
+      .pipe(
+        tap(cat => this.log(`${cat.name} updated successfully`)),
+        catchError(this.handleError('updateCategory', null))
+      );
   }
 
-  private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      // TODO: send the error to remote logging infrastructure
-      console.error(error); // log to console instead
-
-      // TODO: better job of transforming error for user consumption
-      this.log(`${operation} failed: ${error.message}`);
-
-      // Let the app keep running by returning an empty result.
-      return of(result as T);
-    };
+  /** Delete existing category on server */
+  removeCategory(id: String): Observable<Category> {
+    const url = `${this.categoryUrl}/${id}`;
+    return this.http.delete<Category>(url)
+      .pipe(
+        tap(_ => console.log('Deleted Successfully')),
+        catchError(this.handleError('removeCategory', null))
+      );
   }
+  private getProducts(categoryId: string): Observable<Product[]> {
+    const url = `${this.categoryUrl}/${categoryId}/products`;
+    return this.http.get<Product[]>(url)
+      .pipe(
+        tap(products => this.log(`fetched ${products.length} products`)),
+        catchError(this.handleError('getProducts', []))
+      );
+  }
+
+
 }

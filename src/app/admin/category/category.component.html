@@ -1,13 +1,20 @@
 <p>
   category admin works!
 </p>
-<ul *ngIf="categories">
-  <li *ngFor="let category of categories">
-    {{ category.name }} - {{ category.description }}
-    <ul>
-      <li *ngFor="let product of category.products">
-        {{ product.name }} - {{ product.description }}
-      </li>
-    </ul>
-  </li>
-</ul>
+<app-category-form (savingCategory)="onSaving($event)"></app-category-form>
+<table *ngIf="categories">
+  <tr>
+    <td>Tên</td>
+    <td>Nội dung</td>
+    <td></td>
+  </tr>
+  <tr *ngFor="let category of categories">
+    <td><input [(ngModel)]="category.name" [disabled]="!isEditing"></td>
+    <td><input [(ngModel)]="category.description" [disabled]="!isEditing"></td>
+    <td>
+      <button *ngIf="!isEditing" (click)="isEditing = true">Edit</button>
+      <button *ngIf="isEditing" (click)="onUpdate(category)">Save</button>
+      <button (click)="onDelete(category._id)">Delete</button>
+    </td>
+  </tr>
+</table>

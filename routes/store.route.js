@@ -24,14 +24,14 @@ router.post('/', function(req, res, next) {
 });
 
 router.put('/:id', function(req, res, next) {
-    Store.findOneAndUpdate(req.params.id, req.body, function (err, item) {
+    Store.findOneAndUpdate({ _id : req.params.id }, req.body, function (err, item) {
         if (err) return next(err);
         res.json(item);
     });
 });
 
 router.delete('/:id', function(req, res, next) {
-    Store.findOneAndRemove(req. params.id, function (err, item) {
+    Store.findOneAndRemove({ _id : req.params.id}, function (err, item) {
         if (err) return next(err);
         res.json(item);
     });
