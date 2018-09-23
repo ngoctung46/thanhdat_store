@@ -1,32 +1,44 @@
 <app-product-form #productForm (savingProduct)="addProduct($event)" [product]="selectedProduct"></app-product-form>
 <h1 class="text-center text-primary">Quản lý sản phẩm</h1>
-<button class="btn btn-success" (click)="selectedProduct={};openModal()">Thêm</button>
-<br/>
-<table *ngIf="products.length > 0" class="table table-bordered table-sm table-responsive">
-  <thead class="thead-light" class="text-center">
-    <tr class="table-secondary">
-      <th>Tên</th>
-      <th>Nội Dung</th>
-      <th>Giá</th>
-      <th>Danh Mục</th>
-      <th>Còn Hàng</th>
-      <th>Giảm Giá</th>
-      <th></th>
-      <th></th>
+<div class="row">
+    <input class="form-control col-9" type="search" placeholder="Tìm kiếm...">
+    <button class="btn btn-success col-3" (click)="selectedProduct={};openModal()">Thêm</button>
+</div>
+<br />
+<br />
+<div class="table-responsive">
+  <table *ngIf="products.length > 0" class="table table-bordered table-sm text-center">
+    <thead class="thead-light" class="text-center">
+      <tr class="table-secondary">
+        <th>Tên</th>
+        <th>Nội Dung</th>
+        <th>Giá</th>
+        <th>Danh Mục</th>
+        <th>Còn Hàng</th>
+        <th>Giảm Giá</th>
+        <th>Hình Ảnh</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tr *ngFor="let product of products | paginate: { itemsPerPage: 10, currentPage: p}">
+      <td>{{ product.name }}</td>
+      <td>{{ product.description }}</td>
+      <td>{{ product.price | number }}</td>
+      <td>{{ product.category?.name }}</td>
+      <td><input type="checkbox" disabled [checked]="product.available"></td>
+      <td><input type="checkbox" disabled [checked]="product.on_sale"></td>
+      <td></td>
+      <td>
+        <button class="btn btn-info" (click)="selectedProduct = product;openModal()">Sửa</button>
+      </td>
+      <td>
+        <button class="btn btn-danger" (click)="removeProduct(product._id)" style="margin-left: 5px">Xóa</button>
+      </td>
     </tr>
-  </thead>
-  <tr *ngFor="let product of products">
-    <td>{{ product.name }}</td>
-    <td>{{ product.description }}</td>
-    <td>{{ product.price | number }}</td>
-    <td>{{ product.category?.name }}</td>
-    <td><input type="checkbox" disabled [checked]="product.available"></td>
-    <td><input type="checkbox" disabled [checked]="product.on_sale"></td>
-    <td>
-      <button class="btn btn-info" (click)="selectedProduct = product;openModal()">Sửa</button>
-    </td>
-    <td>
-      <button class="btn btn-danger" style="margin-left: 5px">Xóa</button>
-    </td>
-  </tr>
-</table>
+  </table>
+  <div class="text-center">
+      <pagination-controls (pageChange)="p = $event"
+      previousLabel="" nextLabel="" autoHide="true"></pagination-controls>
+  </div>
+</div>

@@ -8,6 +8,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { StoreModule } from './store/store.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TruncatePipe } from './pipes/truncate.pipe';
+import { NgxPaginationModule } from 'ngx-pagination';
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,6 +21,7 @@ import { TruncatePipe } from './pipes/truncate.pipe';
     StoreModule,
     ReactiveFormsModule,
     NgbModule,
+    NgxPaginationModule,
     AppRoutingModule
   ],
   providers: [],

@@ -12,6 +12,7 @@ export class ProductComponent implements OnInit {
   @ViewChild('productForm') productForm;
   products = [];
   selectedProduct = new Product();
+  p = 1;
   constructor(
     private productService: ProductService,
     private categoryService: CategoryService
@@ -43,6 +44,11 @@ export class ProductComponent implements OnInit {
     if (!exist) {
       this.products.push(product);
     }
+  }
+
+  removeProduct(id: string): void {
+    this.productService.removeProduct(id)
+      .subscribe(_ => this.products = this.products.filter(x => x._id !== id));
   }
 
   openModal(): void {

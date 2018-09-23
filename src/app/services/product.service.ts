@@ -26,6 +26,15 @@ export class ProductService extends BaseService {
         );
   }
 
+  public getProduct(id: String): Observable<Product> {
+    const url = `${this.productUrl}/${id}`;
+    return this.http.get<Product>(url)
+      .pipe(
+        tap(product => this.log(`get ${product.name} successfully`)),
+        catchError(this.handleError('getProduct', null))
+      );
+  }
+
   public saveProduct(product: Product): Observable<Product> {
     return this.http.post<Product>(this.productUrl, product, httpOptions)
       .pipe(
@@ -40,6 +49,15 @@ export class ProductService extends BaseService {
       .pipe(
         tap(p => this.log(`update ${p.name} successfully`)),
         catchError(this.handleError('getProduct', null))
+      );
+  }
+
+  public removeProduct(id: String): Observable<Product> {
+    const url = `${this.productUrl}/${id}`;
+    return this.http.delete<Product>(url)
+      .pipe(
+        tap(p => this.log(`${p.name} deleted`)),
+        catchError(this.handleError('deleteProduct', null))
       );
   }
 }
