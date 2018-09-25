@@ -1,3 +1,4 @@
+import { FileSelectDirective } from 'ng2-file-upload';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -11,7 +12,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
     NgxPaginationModule,
     ReactiveFormsModule
   ],
-  declarations: [ProductComponent, ProductFormComponent],
+  declarations: [ProductComponent, ProductFormComponent, FileSelectDirective ],
   exports: []
 })
 export class ProductModule { }

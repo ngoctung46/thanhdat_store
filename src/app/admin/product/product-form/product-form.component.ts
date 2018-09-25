@@ -5,7 +5,8 @@ import { Product } from './../../../models/product.models';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit, EventEmitter, Output, ViewChild, Input, OnChanges } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-
+import { FileUploader } from 'ng2-file-upload';
+const URL = '/api/upload';
 @Component({
   selector: 'app-product-form',
   templateUrl: './product-form.component.html',
@@ -17,6 +18,10 @@ export class ProductFormComponent implements OnInit, OnChanges {
   @Input() product = new Product();
   productForm: any;
   categories = [];
+  imageUrl = '';
+  isFinishUpload: boolean;
+  uploader: FileUploader = new FileUploader({url: URL, itemAlias: 'photo'});
+  message: string;
   constructor(
     private formBuilder: FormBuilder,
     private productService: ProductService,
@@ -27,16 +32,27 @@ export class ProductFormComponent implements OnInit, OnChanges {
   ngOnInit() {
     this.categoryService.getCategories()
       .subscribe(categories => this.categories = categories);
+      this.uploader.onAfterAddingFile = (file) => {
+        file.withCredentials = false;
+      };
+      this.uploader.onCompleteItem = (item: any, response: any, headers: any) => {
+        const res = JSON.parse(response);
+        const path = this.message = res['path'];
+        this.imageUrl = path;
+      };
   }
 
   ngOnChanges() {
     this.initForm();
+    this.setImgUrl();
   }
 
   onSubmit(): void {
     this.product = new Product(this.productForm.value);
-    const imgUrl = this.productForm.get('image_url').value;
-    this.product.image_urls.push(imgUrl);
+    if (this.imageUrl === '') {
+      this.imageUrl = 'placeholder.png';
+    }
+    this.product.image_urls[0] = this.imageUrl;
     if (!this.product._id) {
       this.productService.saveProduct(this.product)
       .subscribe(product => {
@@ -47,7 +63,7 @@ export class ProductFormComponent implements OnInit, OnChanges {
         });
       });
     } else {
-      this.productService.updateProduct(this.productForm.value)
+      this.productService.updateProduct(this.product)
         .subscribe(product => this.savingProduct.emit(product));
     }
   }
@@ -64,8 +80,16 @@ export class ProductFormComponent implements OnInit, OnChanges {
       'price': [this.product.price, Validators.required],
       'available': [this.product.available],
       'on_sale': [this.product.on_sale],
-      'category_id': [this.product.category_id],
-      'image_url': []
+      'category_id': [this.product.category_id]
     });
+  }
+
+  private setImgUrl(): void {
+    if (this.product.image_urls !== undefined &&
+      this.product.image_urls.length > 0) {
+        this.imageUrl = this.product.image_urls[0];
+    } else {
+      this.imageUrl = '';
+    }
   }
 }

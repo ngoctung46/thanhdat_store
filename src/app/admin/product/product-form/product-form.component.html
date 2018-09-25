@@ -30,7 +30,14 @@
       </div>
       <div class="form-group">
         <label for="image_url">Hình ảnh</label>
-        <input type="file" class="form-control-file" formControlName="image_url">
+        <input type="file" ng2FileSelect [uploader]="uploader" class="form-control-file">
+        <button type="button" class="btn btn-success btn-s"
+          (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+          Tải Lên
+        </button>
+        <div class="alert alert-danger">
+          {{ message }}
+        </div>
       </div>
       <div class="form-group">
         <label for="category">Danh mục</label>

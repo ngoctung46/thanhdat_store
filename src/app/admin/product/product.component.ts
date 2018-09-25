@@ -2,7 +2,10 @@ import { CategoryService } from './../../services/category.service';
 import { ProductService } from './../../services/product.service';
 import { Product } from './../../models/product.models';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
+const IMG_PLACEHOLDER = 'placeholder.png';
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
@@ -10,9 +13,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 })
 export class ProductComponent implements OnInit {
   @ViewChild('productForm') productForm;
-  products = [];
+  filteredProducts = [];
   selectedProduct = new Product();
   p = 1;
+  products = [];
+  private searchTearms = new Subject<string>();
   constructor(
     private productService: ProductService,
     private categoryService: CategoryService
@@ -20,6 +25,16 @@ export class ProductComponent implements OnInit {
 
   ngOnInit() {
     this.getProducts();
+    this.searchTearms.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+    ).subscribe(term => {
+      if (term === '' || term === undefined) {
+        this.filteredProducts = this.products;
+      } else {
+        this.filteredProducts = this.products.filter(x => x.name.includes(term.trim()));
+      }
+    });
   }
 
   getProducts(): void {
@@ -30,6 +45,7 @@ export class ProductComponent implements OnInit {
           this.categoryService.getCategory(product.category_id)
             .subscribe(category => product.category = category);
         });
+        this.filteredProducts = this.products;
       });
   }
 
@@ -53,6 +69,22 @@ export class ProductComponent implements OnInit {
 
   openModal(): void {
     this.productForm.open();
+  }
+
+  getImageUrl(product): string {
+    if (product.image_urls != null && product.image_urls.length > 0) {
+      if (product.image_urls[0] !== '') {
+        return product.image_urls[0];
+      } else {
+        return '';
+      }
+    } else {
+      return '';
+    }
+  }
+
+  search(term: string): void {
+    this.searchTearms.next(term);
   }
 
 }
